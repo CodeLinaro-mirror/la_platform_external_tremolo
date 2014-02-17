@@ -403,7 +403,7 @@ int vorbis_book_unpack(oggpack_buffer *opb,codebook *s){
   switch((int)oggpack_read(opb,1)){
   case 0:
     /* unordered */
-    lengthlist=(char *)alloca(sizeof(*lengthlist)*s->entries);
+    lengthlist=(char *)calloc(s->entries, sizeof(*lengthlist));
     if(!lengthlist) goto _eofout;
 
     /* allocated but unused entries? */
@@ -438,7 +438,7 @@ int vorbis_book_unpack(oggpack_buffer *opb,codebook *s){
       long length=oggpack_read(opb,5)+1;
 
       s->used_entries=s->entries;
-      lengthlist=(char *)alloca(sizeof(*lengthlist)*s->entries);
+      lengthlist=(char *)calloc(s->entries, sizeof(*lengthlist));
       if (!lengthlist) goto _eofout;
 
       for(i=0;i<s->entries;){
@@ -608,10 +608,12 @@ int vorbis_book_unpack(oggpack_buffer *opb,codebook *s){
 
   if(oggpack_eop(opb))goto _eofout;
 
+  free(lengthlist);
   return 0;
  _errout:
  _eofout:
   vorbis_book_clear(s);
+  free(lengthlist);
   return -1;
 }
 
