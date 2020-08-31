@@ -1,6 +1,7 @@
 cc_library {
     name: "libvorbisidec",
     vendor_available: true,
+    host_supported: true,
 
     srcs: [
         "Tremolo/bitwise.c",
@@ -35,12 +36,6 @@ cc_library {
         arm64: {
             cflags: ["-DONLY_C"],
         },
-        mips: {
-            cflags: ["-DONLY_C"],
-        },
-        mips64: {
-            cflags: ["-DONLY_C"],
-        },
         x86: {
             cflags: ["-DONLY_C"],
         },
@@ -68,5 +63,10 @@ cc_library {
         misc_undefined: ["bounds"],
     },
 
+    target: {
+        darwin: {
+            enabled: false,
+        },
+    },
     min_sdk_version: "29",
 }
